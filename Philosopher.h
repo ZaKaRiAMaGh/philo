@@ -20,4 +20,5 @@
 
 int		parser(int ac, char **av, int **tab);
 long	ft_atoi(const char *str);
+
 #endif

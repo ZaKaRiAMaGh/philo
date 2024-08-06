@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zmaghdao <zmaghdao@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 22:14:16 by zmaghdao          #+#    #+#             */
+/*   Updated: 2024/08/05 22:14:16 by zmaghdao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Philosopher.h"
 
@@ -39,7 +49,12 @@ int parser(int ac, char **av, int **tab)
 	{
 		if (check_strings(av[i]) != 0)
 			return (1);
-		if ((ft_atoi(av[i]) < 60 && i > 1) || (ft_atoi(av[i]) <= 0 && i == 1))
+		if ((ac == 5) && ((ft_atoi(av[i]) < 60 && i > 1)
+		|| ((ft_atoi(av[i]) <= 0 || ft_atoi(av[i]) > 200) && i == 1)))
+			return (1);
+		else if ((ac == 6) && ((ft_atoi(av[i]) < 60 && i > 1 && i < ac - 1)
+		|| ((ft_atoi(av[i]) <= 0 || ft_atoi(av[i]) > 200) && i == 1)
+		|| (ft_atoi(av[ac - 1]) < 0)))
 			return (1);
 		i++;
 	}

@@ -1,4 +1,16 @@
-#include "philosopher.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zmaghdao <zmaghdao@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 22:14:26 by zmaghdao          #+#    #+#             */
+/*   Updated: 2024/08/05 22:14:26 by zmaghdao         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Philosopher.h"
 
 // void	*function()
 // {
@@ -15,7 +27,7 @@ int main(int ac, char **av)
 	// pthread_t t1;
 	// else 
 	// {
-	//	 pthread_create(&t1, NULL, &function, NULL);
+		// pthread_create(&t1, NULL, &function, NULL);
 	//	 pthread_join(t1,NULL);
 	// }
 	i = parser(ac, av, &tab);
@@ -23,6 +35,7 @@ int main(int ac, char **av)
 		return (printf("Error\n"), -1);
 	else
 		printf("sal7a\n");
+	// while (1);
 	for (int h = 0; h < ac - 1; h++)
 		printf("%d\n", tab[h]);
 	return 0;

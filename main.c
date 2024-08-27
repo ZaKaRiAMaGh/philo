@@ -12,36 +12,37 @@
 
 #include "Philosopher.h"
 
-int	mails = 0;
-
-void	*function()
+int	philosopher_init(t_philo *philo, char **av)
 {
-	// printf("here is the vest\n");//t1 : 620 t2 :601 r inc w
-	for (size_t i = 0; i < 60000; i++)
-		mails++;
+	philo->nb_philo = ft_atoi(av[1]);
+	philo->ttodie = ft_atoi(av[2]);
+	philo->ttoeat = ft_atoi(av[3]);
+	philo->ttosleep = ft_atoi(av[4]);
+	if (av[5])
+		philo->meals = ft_atoi(av[5]);
+	else
+		philo->meals = 0;
+	if (gettimeofday(&philo->time, NULL) != 0)
+		return (write(2, "gettimeofday error\n", 19), 1);
+	return (0);
+}
+
+void	philosophers(t_philo *philo, char **tab)
+{
+	philosopher_init(philo, tab);
 }
 
 int main(int ac, char **av)
 {
-	// if (ac < 5 || ac > 6)
-	// 	return (write(2, "please run the program like :\n"
-	// 	"./philosopher nphilos tdie teat tsleep nmeals(optional)!\n", 88), 1);
-	(void)ac;
-	(void)av;
-	// int	i;
-	// int	*tab;
-	pthread_t t1, t2;
-	pthread_create(&t1, NULL, &function, NULL);
-	pthread_create(&t2, NULL, &function, NULL);
-	pthread_join(t1, NULL);
-	pthread_join(t2, NULL);
-	// i = parser(ac, av, &tab);
-	// if (i == 1)
-	// 	return (printf("Error\n"), -1);
-	// else
-	// 	printf("sal7a\n");
-	// for (int h = 0; h < ac - 1; h++)
-	// 	printf("%d\n", tab[h]);
+	t_philo philo;
+	int		i;
+
+	if (ac < 5 || ac > 6)
+		return (print_instruction(), 1);
+	i = parser(ac, av);
+	if (i == 1)
+		return (printf("Error\n"), -1);
+	philosophers(&philo, av);
 	printf("mails : %d\n", mails);
 	return 0;
 }

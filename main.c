@@ -12,6 +12,13 @@
 
 #include "Philosopher.h"
 
+size_t	get_time(t_philo *philo)
+{
+	if (gettimeofday(&philo->time, NULL) != 0)
+		return (write(2, "gettimeofday error !\n", 22), -1);
+	return ((philo->time.tv_sec * 1000) + (philo->time.tv_usec / 1000));
+}
+
 int	philosopher_init(t_philo *philo, char **av)
 {
 	philo->nb_philo = ft_atoi(av[1]);
@@ -22,8 +29,10 @@ int	philosopher_init(t_philo *philo, char **av)
 		philo->meals = ft_atoi(av[5]);
 	else
 		philo->meals = 0;
-	if (gettimeofday(&philo->time, NULL) != 0)
-		return (write(2, "gettimeofday error\n", 19), 1);
+	philo->start = get_time(philo);
+	philo->last_meal = get_time(philo);
+	if (philo->start == -1)
+		return (1);
 	return (0);
 }
 
@@ -43,6 +52,6 @@ int main(int ac, char **av)
 	if (i == 1)
 		return (printf("Error\n"), -1);
 	philosophers(&philo, av);
-	printf("mails : %d\n", mails);
+	// printf("mails : %d\n", mails);
 	return 0;
 }

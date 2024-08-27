@@ -19,13 +19,8 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef pthread_mutex_t	t_mutex;
-
-typedef struct s_time
-{
-	long	sec;
-	long	microsec;
-}	t_time;
+typedef pthread_mutex_t		t_mutex;
+typedef struct timeval		t_time;
 
 typedef struct s_philo
 {
@@ -38,6 +33,8 @@ typedef struct s_philo
 	t_mutex		*forks;
 	pthread_t	*philo;
 	t_time		time;
+	size_t		last_meal;
+	size_t		start;
 }	t_philo;
 
 

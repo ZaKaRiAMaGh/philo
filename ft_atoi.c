@@ -39,7 +39,7 @@ long	ft_atoi(const char *str)
 			if (res < 0)
 				return(write(2, "negative !!\n", 13), 0);
 			else
-			return(write(2, ">overflow !!\n", 14), -1);
+			return(write(2, "> overflow !!\n", 14), -1);
 		}
 		i++;
 	}

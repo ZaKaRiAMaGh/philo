@@ -12,46 +12,73 @@
 
 #include "Philosopher.h"
 
-size_t	get_time(t_philo *philo)
+int	philosopher_init(t_data *data, char **av, t_philo **philo)
 {
-	if (gettimeofday(&philo->time, NULL) != 0)
-		return (write(2, "gettimeofday error !\n", 22), -1);
-	return ((philo->time.tv_sec * 1000) + (philo->time.tv_usec / 1000));
-}
-
-int	philosopher_init(t_philo *philo, char **av)
-{
-	philo->nb_philo = ft_atoi(av[1]);
-	philo->ttodie = ft_atoi(av[2]);
-	philo->ttoeat = ft_atoi(av[3]);
-	philo->ttosleep = ft_atoi(av[4]);
+	data->nb_philo = ft_atoi(av[1]);
+	data->ttodie = ft_atoi(av[2]);
+	data->ttoeat = ft_atoi(av[3]);
+	data->ttosleep = ft_atoi(av[4]);
+	data->meals = -1;
 	if (av[5])
-		philo->meals = ft_atoi(av[5]);
-	else
-		philo->meals = 0;
-	philo->start = get_time(philo);
-	philo->last_meal = get_time(philo);
-	if (philo->start == -1)
+		data->meals = ft_atoi(av[5]);
+	data->emeals = 0;
+	data->alive = true;
+	if (create_mutexs(data) != 0)
 		return (1);
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
+	if (!data->forks)
+		return (mutex_destroy(data), 1);
+	*philo = malloc(sizeof(t_philo) * data->nb_philo);
+	if (!*philo)
+		return (mutex_destroy(data), free(data->forks), 1);
 	return (0);
 }
 
-void	philosophers(t_philo *philo, char **tab)
+int	creation_philosopher(t_data *data, t_philo *philo)
 {
-	philosopher_init(philo, tab);
+	int	i;
+
+	i = -1;
+	data->start = get_time();
+	while (++i < data->nb_philo)
+	{
+		philo[i].id = i + 1;
+		philo[i].emeals = 0;
+		philo[i].last_meal = data->start;
+		philo[i].alive = true;
+		// data->emeals = 0;
+		philo[i].data = data;
+		philo[i].left_fork = &data->forks[i];
+		philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+			return (write(2, "Error: mutex init failed\n", 26), -1);
+	}
+	return (0);
+}
+
+int	philosophers(t_data *data, char **tab)
+{
+	t_philo	*philo;
+
+	if (philosopher_init(data, tab, &philo) !=0)
+		return (printf("Error\n"), -1);
+	if (creation_philosopher(data, philo) < 0)
+		return (ft_free(data, philo), -1);
+	if (simulation(data, philo) < 0)
+		return (ft_free(data, philo), -1);
+	return (0);
 }
 
 int main(int ac, char **av)
 {
-	t_philo philo;
-	int		i;
+	t_data	data;
+	int		i; 
 
 	if (ac < 5 || ac > 6)
 		return (print_instruction(), 1);
 	i = parser(ac, av);
 	if (i == 1)
-		return (printf("Error\n"), -1);
-	philosophers(&philo, av);
-	// printf("mails : %d\n", mails);
+		return (write(2, "Error\n", 7), -1);
+	philosophers(&data, av);
 	return 0;
 }

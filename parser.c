@@ -68,7 +68,7 @@ int parser(int ac, char **av)
 			return (1);
 		else if ((ac == 6) && ((ft_atoi(av[i]) < 60 && i > 1 && i < ac - 1)
 		|| ((ft_atoi(av[i]) <= 0 || ft_atoi(av[i]) > 200) && i == 1)
-		|| (ft_atoi(av[ac - 1]) < 0)))
+		|| (ft_atoi(av[ac - 1]) <= 0)))
 			return (1);
 		i++;
 	}

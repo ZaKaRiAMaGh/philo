@@ -12,11 +12,11 @@
 
 CC = cc
 
-NAME = Philosopher
+NAME = philosopher
 
-CFLAGS = #-Wall -Wextra -Werror #-pthread #-g #-fsanitize=address 
+CFLAGS =  -pthread -g #-fsanitize=address #-Wall -Wextra -Werror
 
-SOURCES = main.c ft_atoi.c parser.c
+SOURCES = main.c ft_atoi.c parser.c utils.c instructions.c simulation.c
 
 OBJECT_FILE = $(SOURCES:.c=.o)
 

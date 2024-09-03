@@ -12,3 +12,53 @@
 
 #include "Philosopher.h"
 
+void	ft_usleep(size_t time)
+{
+	size_t	start;
+
+	start = get_time();
+	while (get_time() - time < start)
+		usleep(200);
+}
+
+size_t	get_time(void)
+{
+	struct timeval	time;
+	
+	if (gettimeofday(&time, NULL) != 0)
+		return (write(2, "gettimeofday error !\n", 22), -1);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+void	ft_free(t_data *data, t_philo *philo)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->nb_philo)
+		pthread_mutex_destroy(&data->forks[i]);
+	free(data->forks);
+	free(philo);
+	mutex_destroy(data);
+}
+
+void	mutex_destroy(t_data *data)
+{
+	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->death_mutex);
+	pthread_mutex_destroy(&data->eat_mutex);
+	pthread_mutex_destroy(&data->sleep_mutex);
+}
+
+int	create_mutexs(t_data *data)
+{
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (write(2, "Error: mutex init failed\n", 26), 1);
+	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+		return (write(2, "Error: mutex init failed\n", 26), 1);
+	if (pthread_mutex_init(&data->eat_mutex, NULL) != 0)
+		return (write(2, "Error: mutex init failed\n", 26), 1);
+	if (pthread_mutex_init(&data->sleep_mutex, NULL) != 0)
+		return (write(2, "Error: mutex init failed\n", 26), 1);
+	return (0);
+}

@@ -31,6 +31,8 @@ typedef struct s_philo
 	pthread_t			philo_th;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
+;	pthread_mutex_t		lastm_mutex;
+	pthread_mutex_t		nmeals;
 	t_data				*data;
 }	t_philo;
 
@@ -41,8 +43,7 @@ typedef struct s_data
 	int					ttoeat;
 	int					ttosleep;
 	int					meals;
-	int					emeals;
-	bool				alive;
+	int					pfull;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_mutex;
 	pthread_mutex_t		death_mutex;

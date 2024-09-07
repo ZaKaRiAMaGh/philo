@@ -21,8 +21,7 @@ int	philosopher_init(t_data *data, char **av, t_philo **philo)
 	data->meals = -1;
 	if (av[5])
 		data->meals = ft_atoi(av[5]);
-	data->emeals = 0;
-	data->alive = true;
+	data->pfull = 0;
 	if (create_mutexs(data) != 0)
 		return (1);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
@@ -46,11 +45,12 @@ int	creation_philosopher(t_data *data, t_philo *philo)
 		philo[i].emeals = 0;
 		philo[i].last_meal = data->start;
 		philo[i].alive = true;
-		// data->emeals = 0;
 		philo[i].data = data;
 		philo[i].left_fork = &data->forks[i];
 		philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
-		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		if (pthread_mutex_init(&philo[i].lastm_mutex, NULL) != 0
+			|| pthread_mutex_init(&data->forks[i], NULL) != 0
+			|| pthread_mutex_init(&philo[i].nmeals, NULL) != 0)
 			return (write(2, "Error: mutex init failed\n", 26), -1);
 	}
 	return (0);
@@ -59,12 +59,14 @@ int	creation_philosopher(t_data *data, t_philo *philo)
 int	philosophers(t_data *data, char **tab)
 {
 	t_philo	*philo;
+	int		stat;
 
 	if (philosopher_init(data, tab, &philo) !=0)
 		return (printf("Error\n"), -1);
 	if (creation_philosopher(data, philo) < 0)
 		return (ft_free(data, philo), -1);
-	if (simulation(data, philo) < 0)
+	stat = simulation(data, philo);
+	if (stat < 0)
 		return (ft_free(data, philo), -1);
 	return (0);
 }

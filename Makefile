@@ -14,7 +14,7 @@ CC = cc
 
 NAME = philosopher
 
-CFLAGS =  -pthread -g #-fsanitize=address #-Wall -Wextra -Werror
+CFLAGS =  -Wall -Wextra -Werror -pthread -g -fsanitize=thread
 
 SOURCES = main.c ft_atoi.c parser.c utils.c instructions.c simulation.c
 

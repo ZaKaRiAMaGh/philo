@@ -12,9 +12,9 @@
 
 CC = cc
 
-NAME = philosopher
+NAME = philo
 
-CFLAGS =  -Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CFLAGS =  -Wall -Wextra -Werror -pthread -g #-fsanitize=thread
 
 SOURCES = main.c ft_atoi.c parser.c utils.c instructions.c simulation.c
 

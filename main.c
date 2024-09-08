@@ -21,7 +21,6 @@ int	philosopher_init(t_data *data, char **av, t_philo **philo)
 	data->meals = -1;
 	if (av[5])
 		data->meals = ft_atoi(av[5]);
-	data->pfull = 0;
 	if (create_mutexs(data) != 0)
 		return (1);
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);

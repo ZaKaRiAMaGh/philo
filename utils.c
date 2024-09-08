@@ -12,13 +12,22 @@
 
 #include "Philosopher.h"
 
-void	ft_usleep(size_t time)
+void	ft_usleep(size_t time, t_data *data)
 {
 	size_t	start;
 
 	start = get_time();
-	while (get_time() - time < start)
+	while (get_time() - time < start)//check the end bool
+	{
+		pthread_mutex_lock(&data->print_mutex);
+		if (data->end)
+		{
+			(pthread_mutex_unlock(&data->print_mutex));
+			return ;
+		}
+		pthread_mutex_unlock(&data->print_mutex);
 		usleep(200);
+	}
 }
 
 size_t	get_time(void)
@@ -46,19 +55,13 @@ void	mutex_destroy(t_data *data)
 {
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
-	pthread_mutex_destroy(&data->eat_mutex);
-	pthread_mutex_destroy(&data->sleep_mutex);
 }
 
 int	create_mutexs(t_data *data)
 {
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (write(2, "Error: mutex init failed\n", 26), 1);
-	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
-		return (write(2, "Error: mutex init failed\n", 26), 1);
-	if (pthread_mutex_init(&data->eat_mutex, NULL) != 0)
-		return (write(2, "Error: mutex init failed\n", 26), 1);
-	if (pthread_mutex_init(&data->sleep_mutex, NULL) != 0)
-		return (write(2, "Error: mutex init failed\n", 26), 1);
+	// if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+	// 	return (write(2, "Error: mutex init failed\n", 26), 1);
 	return (0);
 }

@@ -12,10 +12,11 @@
 
 #include "Philosopher.h"
 
-void  ft_print(t_philo *philo, int	status)
+int  ft_print(t_philo *philo, int	status)
 {
 	char	*str;
 
+	str = NULL;
 	if (status == 0)
 		str = "has taken a fork";
 	else if (status == 1)
@@ -25,35 +26,46 @@ void  ft_print(t_philo *philo, int	status)
 	else if (status == 3)
 		str = "is thinking";
 	pthread_mutex_lock(&philo->data->print_mutex);
+	if (philo->data->end)
+		return (pthread_mutex_unlock(&philo->data->print_mutex), 1);
 	printf("%ld %d %s\n", get_time() - philo->data->start, philo->id, str);
 	pthread_mutex_unlock(&philo->data->print_mutex);
+	return (0);
 }
 
-void	ft_eat(t_philo *philo)
+int	ft_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	ft_print(philo, 0);
+	if (ft_print(philo, 0))
+		return (pthread_mutex_unlock(philo->left_fork), 1); //unlock before
 	pthread_mutex_lock(philo->right_fork);
-	ft_print(philo, 0);
+	if (ft_print(philo, 0))
+		return (pthread_mutex_unlock(philo->left_fork), pthread_mutex_unlock(philo->right_fork), 1); // unllock before return 
 	pthread_mutex_lock(&philo->lastm_mutex);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->lastm_mutex);
-	ft_print(philo, 1);
-	ft_usleep(philo->data->ttoeat);
+	if (ft_print(philo, 1))
+		return (1);
+	ft_usleep(philo->data->ttoeat, philo->data);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_lock(&philo->data->eat_mutex);
+	pthread_mutex_lock(&philo->nmeals);
 	philo->emeals++;
-	pthread_mutex_unlock(&philo->data->eat_mutex);
+	pthread_mutex_unlock(&philo->nmeals);
+	return (0);
 }
 
-void	ft_sleep(t_philo *philo)
+int	ft_sleep(t_philo *philo)
 {
-	ft_print(philo, 2);
-	ft_usleep(philo->data->ttosleep);
+	if (ft_print(philo, 2))
+		return (1);
+	ft_usleep(philo->data->ttosleep, philo->data);
+	return (0);
 }
 
-void	ft_think(t_philo *philo)
+int	ft_think(t_philo *philo)
 {
-	ft_print(philo, 3);
+	if (ft_print(philo, 3))
+		return (1);
+	return (0);
 }

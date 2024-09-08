@@ -43,7 +43,6 @@ int	creation_philosopher(t_data *data, t_philo *philo)
 		philo[i].id = i + 1;
 		philo[i].emeals = 0;
 		philo[i].last_meal = data->start;
-		philo[i].alive = true;
 		philo[i].data = data;
 		philo[i].left_fork = &data->forks[i];
 		philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
@@ -67,6 +66,7 @@ int	philosophers(t_data *data, char **tab)
 	stat = simulation(data, philo);
 	if (stat < 0)
 		return (ft_free(data, philo), -1);
+	ft_end_sim(data, philo);
 	return (0);
 }
 

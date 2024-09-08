@@ -27,7 +27,6 @@ typedef struct s_philo
 	int					id;
 	int					emeals;
 	size_t				last_meal;
-	bool 				alive;
 	pthread_t			philo_th;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
@@ -46,10 +45,8 @@ typedef struct s_data
 	bool				end;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_mutex;
-	pthread_mutex_t		death_mutex;
 	size_t				start;
 }	t_data;
-
 
 int		parser(int ac, char **av);
 long	ft_atoi(const char *str);
@@ -66,5 +63,6 @@ void	*routine(void *argument);
 int		ft_eat(t_philo *philo);
 int		ft_sleep(t_philo *philo);
 int		ft_think(t_philo *philo);
+void	ft_end_sim(t_data *data, t_philo *philo);
 
 #endif

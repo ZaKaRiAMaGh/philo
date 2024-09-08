@@ -54,14 +54,11 @@ void	ft_free(t_data *data, t_philo *philo)
 void	mutex_destroy(t_data *data)
 {
 	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->death_mutex);
 }
 
 int	create_mutexs(t_data *data)
 {
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (write(2, "Error: mutex init failed\n", 26), 1);
-	// if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
-	// 	return (write(2, "Error: mutex init failed\n", 26), 1);
 	return (0);
 }
